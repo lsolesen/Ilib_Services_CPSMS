@@ -28,8 +28,6 @@
  * @author   Sune Jensen <sj@sunet.dk>
  * @author   Lars Olesen <lars@legestue.net>
  * 
- * 
- * @todo The pear package contains way to many files. /Sune 16/3 2008
  */
 class Ilib_Services_CPSMS
 {
