@@ -11,7 +11,7 @@ class CPSMSTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->sms = new Ilib_Services_CPSMS(ILIB_SERVICES_CPSMS_TEST_USERNAME, ILIB_SERVICES_CPSMS_TEST_PASSWORD);
+        $this->sms = new Ilib_Services_CPSMS(ILIB_SERVICES_CPSMS_TEST_USERNAME, ILIB_SERVICES_CPSMS_TEST_PASSWORD, 'CPSMS_TEST');
     }
 
     function tearDown()
@@ -23,9 +23,28 @@ class CPSMSTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue(is_object($this->sms));
     }
+    
+    function testAddInvalidRecipientReturnsFalse()
+    {
+        $this->assertFalse($this->sms->addRecipient('123456'));
+    }
+    
+    function testAddValidRecipientReturnsTrue()
+    {
+        $this->assertTrue($this->sms->addRecipient('12345678'));
+    }
 
     function testSendReturnsTrue()
     {
-        $this->assertTrue($this->sms->send('Test', ILIB_SERVICES_CPSMS_TEST_PHONE));
+        $this->sms->setMessage('Test');
+        $this->sms->addRecipient(ILIB_SERVICES_CPSMS_TEST_PHONE);
+        $this->assertTrue($this->sms->send(), $this->sms->getErrorMessage());
+    }
+    
+    function testSendToMultipleRecipientsReturnsTrue() {
+        $this->sms->setMessage('Test');
+        $this->sms->addRecipient(ILIB_SERVICES_CPSMS_TEST_PHONE);
+        $this->sms->addRecipient(ILIB_SERVICES_CPSMS_TEST_PHONE);
+        $this->assertTrue($this->sms->send(), $this->sms->getErrorMessage());
     }
 }
