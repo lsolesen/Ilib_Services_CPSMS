@@ -1,4 +1,36 @@
 <?php
+/**
+ * Class for easy use of CPSMS gateway.
+ * 
+ * PHP Version 5
+ * 
+ * @category Services
+ * @package Ilib_Services_CPSMS
+ * @author   Sune Jensen <sj@sunet.dk>
+ * @author   Lars Olesen <lars@legestue.net>
+ * 
+ */
+
+/**
+ * Class for easy use of CPSMS gateway.
+ *
+ *
+ * <code>
+ * $sms = new Ilib_Services_CPSMS('username', 'password', 'sendername');
+ * $sms->setMessage('Test sms');
+ * $sms->addRecipient('12345678');
+ * $sms->addRecipient('87654321');
+ * $sms->send();
+ * </code>
+ *
+ * @category Services
+ * @package  Ilib_Services_CPSMS
+ * @author   Sune Jensen <sj@sunet.dk>
+ * @author   Lars Olesen <lars@legestue.net>
+ * 
+ * 
+ * @todo The pear package contains way to many files. /Sune 16/3 2008
+ */
 class Ilib_Services_CPSMS
 {
     protected $url;
@@ -6,6 +38,13 @@ class Ilib_Services_CPSMS
     protected $recipient;
     protected $errormessage;
 
+    /**
+     * constructor
+     * 
+     * @param string username
+     * @param string password
+     * @param string sendername
+     */
     public function __construct($username, $password, $sendername)
     {
         $this->url  = "http://www.cpsms.dk/sms/";
@@ -13,11 +52,16 @@ class Ilib_Services_CPSMS
         $this->url .= "&password=" . $password; // Password
         $this->url .= "&from=" . urlencode($sendername); // Sendername
         
-        
         $this->recipient = array();
         $this->errormessage = '';
     }
     
+    /**
+     * Sets the message to be send
+     * 
+     * @param string message Maximum 459 characters
+     * @return boolean true or false
+     */
     public function setMessage($message)
     {
         if(empty($message)) {
@@ -34,6 +78,12 @@ class Ilib_Services_CPSMS
         return true;
     }
     
+    /**
+     * Adds recipients to sms
+     * 
+     * @param string recipient Only 8 numeric characters
+     * @return boolean true or false
+     */
     public function addRecipient($recipient)
     {
         if(!ereg("^[0-9]{8}$", $recipient)) {
@@ -45,6 +95,11 @@ class Ilib_Services_CPSMS
         return true;
     }
 
+    /**
+     * Send sms
+     * 
+     * @return boolean true on success
+     */
     public function send()
     {
         if(empty($this->message)) {
@@ -78,11 +133,22 @@ class Ilib_Services_CPSMS
         }
     }
     
+    /**
+     * Sets an error message on error
+     * 
+     * @param string error message
+     * @return void
+     */
     protected function setErrorMessage($message) 
     {
         $this->errormessage = $message;
     }
     
+    /**
+     * Returns an error message after error
+     * 
+     * @return string error message
+     */
     public function getErrorMessage()
     {
         return $this->errormessage;
