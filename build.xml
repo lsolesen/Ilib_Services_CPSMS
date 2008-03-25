@@ -48,8 +48,8 @@
             <channel>${pear.channel}</channel>
             <description>
                 <!--        Don't exceed this width         -->
-                Class for easy use of cpsms gateway 
-                (http://www.cpsms.dk)
+                Send SMS online med CPSMS SMS Gateway found at
+                http://www.cpsms.dk.
             </description>
 
             <lead user="lsolesen" name="Lars Olesen" email="lars@legestue.net" />
