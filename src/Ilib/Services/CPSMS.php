@@ -60,12 +60,12 @@ class Ilib_Services_CPSMS
      */
     public function setMessage($message)
     {
-        if(empty($message)) {
+        if (empty($message)) {
             $this->setErrorMessage('The message is empty');
             return false;
         }
 
-        if(strlen($message) > 459) {
+        if (strlen($message) > 459) {
             $this->setErrorMessage('The message is to long. Only 459 characters is allowed.');
             return false;
         }
@@ -82,7 +82,7 @@ class Ilib_Services_CPSMS
      */
     public function addRecipient($recipient)
     {
-        if(!ereg("^[0-9]{8}$", $recipient)) {
+        if (!ereg("^[0-9]{8}$", $recipient)) {
             $this->setErrorMessage('Invalid recepient. The number is not 8 numerix characters');
             return false;
         }
@@ -98,34 +98,34 @@ class Ilib_Services_CPSMS
      */
     public function send()
     {
-        if(empty($this->message)) {
+        if (empty($this->message)) {
             $this->setErrorMessage('The message is empty.');
             return false;
         }
 
-        if(!is_array($this->recipient) || empty($this->recipient)) {
+        if (!is_array($this->recipient) || empty($this->recipient)) {
             $this->setErrorMessage('No recipients is given.');
             return false;
         }
 
         $send = "&message=" . $this->message;
 
-        if(count($this->recipient) > 1 ) {
+        if (count($this->recipient) > 1 ) {
             foreach($this->recipient AS $recipient) {
                 $send .= "&recipient[]=" . $recipient; // Recipient
             }
-        }
-        else {
+        } else {
             $send .= "&recipient=" . $this->recipient[0]; // Recipient
         }
 
         // The url is opened
         $reply = file_get_contents($this->url.$send);
-        if (strstr($reply, "<succes>")) {
+
+        // checking the response - if only sent to 0 recipients do not consider it a success
+        if (strstr($reply, "<succes>") AND !strstr($reply, " 0 ")) {
             return true;
         } else {
-        // If not, there has been an error.
-            throw new Exception("The message has NOT been sent. Server response: ".$reply);
+            return false;
         }
     }
 
