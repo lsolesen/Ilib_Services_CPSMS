@@ -40,6 +40,8 @@ class Ilib_Services_CPSMS
      * @param string username
      * @param string password
      * @param string sendername
+     *
+     * @return void
      */
     public function __construct($username, $password, $sendername)
     {
@@ -82,7 +84,7 @@ class Ilib_Services_CPSMS
      */
     public function addRecipient($recipient)
     {
-        if (!ereg("^[0-9]{8}$", $recipient)) {
+        if (!preg_match("/^[0-9]{8}$/", $recipient)) {
             $this->setErrorMessage('Invalid recepient. The number is not 8 numerix characters');
             return false;
         }
@@ -133,6 +135,7 @@ class Ilib_Services_CPSMS
      * Sets an error message on error
      *
      * @param string error message
+     *
      * @return void
      */
     protected function setErrorMessage($message)
